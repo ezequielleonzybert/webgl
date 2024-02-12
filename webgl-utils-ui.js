@@ -252,7 +252,7 @@
                 params[keyValue[0]] = keyValue[1];
             });
         }
-        return params;;
+        return params;
     }
 
     return {
