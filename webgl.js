@@ -54,13 +54,10 @@ function main() {
     var color = [Math.random(), Math.random(), Math.random(), 1];
     var translationSpeed = 30;
     var then = 0;
-    if (!pause) {
-        requestAnimationFrame(drawScene)
-    }
+    requestAnimationFrame(drawScene)
 
 
     function drawScene(now) {
-        console.log(pause);
         now *= 0.001;
         var deltaTime = now - then;
         then = now;
@@ -79,7 +76,8 @@ function main() {
         var offset = 0;
         var count = 18;
         gl.drawArrays(primitiveType, offset, count);
-        requestAnimationFrame(drawScene)
+        if (fullscreen)
+            requestAnimationFrame(drawScene)
     }
 }
 
