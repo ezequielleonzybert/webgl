@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+
+        .container {
+            position: relative;
+        }
+
+        #overlay {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="c"></canvas>
+    <div id="overlay">
+        <div>fps: <span id="fps"></span></div>
+    </div>
+    <script src="webgl-utils.js"></script>
+    <script src="index2.js"></script>
+</body>
+
+</html>
