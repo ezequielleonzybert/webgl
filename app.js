@@ -1,17 +1,18 @@
-var canvas;
+var pause = true;
 
-function runGame() {
-    canvas = document.createElement("canvas");
-    document.body.appendChild(canvas);
-    fullscreen();
-}
+const btn_rungame = document.getElementById("btn_rungame");
+const canvas = document.getElementById("canvas");
 
-function fullscreen() {
-    if (canvas.requestFullscreen) {
-        canvas.requestFullscreen();
-    } else if (canvas.webkitRequestFullscreen) { /* Safari */
-        canvas.webkitRequestFullscreen();
-    } else if (canvas.msRequestFullscreen) { /* IE11 */
-        canvas.msRequestFullscreen();
+btn_rungame.addEventListener("click", () => {
+    pause = false;
+    function openFullscreen() {
+        if (canvas.requestFullscreen) {
+            canvas.requestFullscreen();
+        } else if (canvas.webkitRequestFullscreen) { /* Safari */
+            canvas.webkitRequestFullscreen();
+        } else if (canvas.msRequestFullscreen) { /* IE11 */
+            canvas.msRequestFullscreen();
+        }
     }
-}
+    main();
+});

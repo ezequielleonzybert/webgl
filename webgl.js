@@ -1,5 +1,3 @@
-"use strict";
-
 var vertexShaderSource = `#version 300 es
 in vec2 a_position;
 uniform vec2 u_resolution;
@@ -23,46 +21,56 @@ void main() {
 `;
 
 function main() {
+    //var canvas = document.getElementById("canvas");
     var gl = canvas.getContext("webgl2");
     if (!gl) {
         return;
     }
     var program = webglUtils.createProgramFromSources(gl,
         [vertexShaderSource, fragmentShaderSource]);
-    var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+    var positionLocation = gl.getAttribLocation(program, "a_position");
     var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
     var colorLocation = gl.getUniformLocation(program, "u_color");
     var translationLocation = gl.getUniformLocation(program, "u_translation");
     var positionBuffer = gl.createBuffer();
     var vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
-    gl.enableVertexAttribArray(positionAttributeLocation);
+    //gl.enableVertexAttribArray(positionLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    setGeometry(gl);
+    var vertices = new Float32Array([
+        100, 100,
+        200, 200,
+        150, 50,
+    ]);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     var size = 2;
     var type = gl.FLOAT;
     var normalize = false;
     var stride = 0;
     var offset = 0;
     gl.vertexAttribPointer(
-        positionAttributeLocation, size, type, normalize, stride, offset);
+        positionLocation, size, type, normalize, stride, offset);
     var translation = [0, 0];
     var color = [Math.random(), Math.random(), Math.random(), 1];
-    drawScene();
-    webglLessonsUI.setupSlider("#x", { slide: updatePosition(0), max: gl.canvas.width });
-    webglLessonsUI.setupSlider("#y", { slide: updatePosition(1), max: gl.canvas.height });
-    function updatePosition(index) {
-        return function (event, ui) {
-            translation[index] = ui.value;
-            drawScene();
-        };
+    var translationSpeed = 30;
+    var then = 0;
+    if (!pause) {
+        requestAnimationFrame(drawScene)
     }
-    function drawScene() {
+
+
+    function drawScene(now) {
+        console.log(pause);
+        now *= 0.001;
+        var deltaTime = now - then;
+        then = now;
+        translation[0] += translationSpeed * deltaTime;
         webglUtils.resizeCanvasToDisplaySize(gl.canvas);
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
         gl.clearColor(0, 0, 0, 0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.useProgram(program);
+        gl.enableVertexAttribArray(positionLocation);
         gl.bindVertexArray(vao);
         gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
         gl.uniform4fv(colorLocation, color);
@@ -71,6 +79,7 @@ function main() {
         var offset = 0;
         var count = 18;
         gl.drawArrays(primitiveType, offset, count);
+        requestAnimationFrame(drawScene)
     }
 }
 
@@ -105,4 +114,4 @@ function setGeometry(gl) {
         gl.STATIC_DRAW);
 }
 
-main();
+// main();
