@@ -3,7 +3,7 @@ var canvas;
 function runGame() {
     canvas = document.createElement("canvas");
     document.body.appendChild(canvas);
-    fullscreen();;
+    fullscreen();
 }
 
 function fullscreen() {
