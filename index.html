@@ -1,36 +1,23 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-    <style>
-        body {
-            margin: 0;
-        }
-
-        canvas {
-            width: 100vw;
-            height: 100vh;
-            display: block;
-        }
-
-        .container {
-            position: relative;
-        }
-
-        #overlay {
-            position: absolute;
-            left: 10px;
-            top: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="#">
 </head>
 
 <body>
-    <canvas id="c"></canvas>
-    <div id="overlay">
-        <div>fps: <span id="fps"></span></div>
+    <button onclick="runGame()">Run game</button>
+    <div id="uiContainer">
+        <div id="ui">
+            <div id="x"></div>
+            <div id="y"></div>
+        </div>
     </div>
+    <script src="webgl-utils-ui.js"></script>
     <script src="webgl-utils.js"></script>
-    <script src="index2.js"></script>
+    <script src="webgl.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>
