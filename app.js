@@ -1,4 +1,5 @@
 var fullscreen = false;
+var req;
 
 const btn_rungame = document.getElementById("btn_rungame");
 const canvas = document.getElementById("canvas");
@@ -17,8 +18,8 @@ function openFullscreen() {
     }
 }
 
-document.addEventListener("fullscreenchange", function () {
-    if (fullscreen = !fullscreen) {
-        main();
-    }
-});
+// document.addEventListener("fullscreenchange", function () {
+//     if (fullscreen = !fullscreen) {
+//         main();
+//     }
+// });

@@ -54,33 +54,31 @@ function main() {
     var color = [Math.random(), Math.random(), Math.random(), 1];
     var translationSpeed = 100;
     var then = 0;
-    if (fullscreen)
-        requestAnimationFrame(drawScene)
-
+    requestAnimationFrame(drawScene);
 
     function drawScene(now) {
-        if (fullscreen) {
-            now *= 0.001;
-            var deltaTime = now - then;
-            then = now;
-            translation[0] += translationSpeed * deltaTime;
-            webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-            gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-            gl.clearColor(0, 0, 0, 0);
-            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-            gl.useProgram(program);
-            gl.enableVertexAttribArray(positionLocation);
-            gl.bindVertexArray(vao);
-            gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
-            gl.uniform4fv(colorLocation, color);
-            gl.uniform2fv(translationLocation, translation);
-            var primitiveType = gl.TRIANGLES;
-            var offset = 0;
-            var count = 18;
-            gl.drawArrays(primitiveType, offset, count);
-            requestAnimationFrame(drawScene)
-        }
+        now *= 0.001;
+        var deltaTime = now - then;
+        then = now;
+        translation[0] += translationSpeed * deltaTime;
+        webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.useProgram(program);
+        gl.enableVertexAttribArray(positionLocation);
+        gl.bindVertexArray(vao);
+        gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
+        gl.uniform4fv(colorLocation, color);
+        gl.uniform2fv(translationLocation, translation);
+        var primitiveType = gl.TRIANGLES;
+        var offset = 0;
+        var count = 18;
+        gl.drawArrays(primitiveType, offset, count);
+        req = requestAnimationFrame(drawScene);
+        req;
     }
+
 }
 
 function setGeometry(gl) {
@@ -114,4 +112,12 @@ function setGeometry(gl) {
         gl.STATIC_DRAW);
 }
 
-// main();
+document.addEventListener("fullscreenchange", function () {
+    if (fullscreen = !fullscreen) {
+        main();
+    }
+    else {
+        console.log("cancelled")
+        cancelAnimationFrame(req);
+    }
+});
