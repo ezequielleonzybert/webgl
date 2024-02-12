@@ -21,5 +21,4 @@ document.addEventListener("fullscreenchange", function () {
     if (fullscreen = !fullscreen) {
         main();
     }
-    console.log(fullscreen);
 });

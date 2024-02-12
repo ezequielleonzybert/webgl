@@ -52,32 +52,34 @@ function main() {
         positionLocation, size, type, normalize, stride, offset);
     var translation = [0, 0];
     var color = [Math.random(), Math.random(), Math.random(), 1];
-    var translationSpeed = 30;
+    var translationSpeed = 100;
     var then = 0;
-    requestAnimationFrame(drawScene)
+    if (fullscreen)
+        requestAnimationFrame(drawScene)
 
 
     function drawScene(now) {
-        now *= 0.001;
-        var deltaTime = now - then;
-        then = now;
-        translation[0] += translationSpeed * deltaTime;
-        webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-        gl.clearColor(0, 0, 0, 0);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.useProgram(program);
-        gl.enableVertexAttribArray(positionLocation);
-        gl.bindVertexArray(vao);
-        gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
-        gl.uniform4fv(colorLocation, color);
-        gl.uniform2fv(translationLocation, translation);
-        var primitiveType = gl.TRIANGLES;
-        var offset = 0;
-        var count = 18;
-        gl.drawArrays(primitiveType, offset, count);
-        if (fullscreen)
+        if (fullscreen) {
+            now *= 0.001;
+            var deltaTime = now - then;
+            then = now;
+            translation[0] += translationSpeed * deltaTime;
+            webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+            gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+            gl.clearColor(0, 0, 0, 0);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            gl.useProgram(program);
+            gl.enableVertexAttribArray(positionLocation);
+            gl.bindVertexArray(vao);
+            gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
+            gl.uniform4fv(colorLocation, color);
+            gl.uniform2fv(translationLocation, translation);
+            var primitiveType = gl.TRIANGLES;
+            var offset = 0;
+            var count = 18;
+            gl.drawArrays(primitiveType, offset, count);
             requestAnimationFrame(drawScene)
+        }
     }
 }
 
