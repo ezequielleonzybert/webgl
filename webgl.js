@@ -1,33 +1,44 @@
-var vertexShaderSource = `#version 300 es
+const vertexShaderSource = `#version 300 es
 in vec2 a_position;
+
 uniform vec2 u_resolution;
 uniform vec2 u_translation;
+
 void main() {
   vec2 position = a_position + u_translation;
   vec2 zeroToOne = position / u_resolution;
   vec2 zeroToTwo = zeroToOne * 2.0;
   vec2 clipSpace = zeroToTwo - 1.0;
+  
   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
-}
-`;
+}`;
 
-var fragmentShaderSource = `#version 300 es
-precision highp float;
+const fragmentShaderSource = `#version 300 es
+precision lowp float;
+
 uniform vec4 u_color;
+
 out vec4 outColor;
+
 void main() {
   outColor = u_color;
-}
-`;
+}`;
 
-var state = -1;
-var prev_state;
-var req;
+let state = -1;
+let prev_state;
 const btn_rungame = document.getElementById("btn_rungame");
+let canvas;
+let gl;
+
+function init() {
+    canvas = document.createElement("canvas");
+    document.body.appendChild(canvas);
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    gl = canvas.getContext("webgl2");
+}
 
 function main() {
-    var canvas = document.getElementById("canvas");
-    var gl = canvas.getContext("webgl2");
     if (!gl) {
         return;
     }
@@ -42,9 +53,9 @@ function main() {
     gl.bindVertexArray(vao);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     var vertices = new Float32Array([
-        100, 100,
         200, 200,
-        150, 50,
+        200, 300,
+        300, 250,
     ]);
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     var size = 2;
@@ -72,7 +83,7 @@ function main() {
         translation[0] += translationSpeed * deltaTime;
         webglUtils.resizeCanvasToDisplaySize(gl.canvas);
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-        gl.clearColor(0, 0, 0, 0);
+        gl.clearColor(0.9, 0.9, 0.5, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.useProgram(program);
         gl.enableVertexAttribArray(positionLocation);
@@ -98,27 +109,32 @@ function main() {
         else if (state == 0) {
             prev_state = state;
             state = 1;
+            canvas.style.display = "block";
             requestAnimationFrame(drawScene);
         }
         else if (state == 1) {
             prev_state = state;
             state = 0;
+            canvas.style.display = "none";
         }
     });
 
-    btn_rungame.addEventListener("click", () => {
-        openFullscreen();
-    });
-
-    function openFullscreen() {
-        if (canvas.requestFullscreen) {
-            canvas.requestFullscreen();
-        } else if (canvas.webkitRequestFullscreen) { /* Safari */
-            canvas.webkitRequestFullscreen();
-        } else if (canvas.msRequestFullscreen) { /* IE11 */
-            canvas.msRequestFullscreen();
-        }
-    }
 }
 
-main();
+btn_rungame.addEventListener("click", () => {
+    if (state == -1) {
+        init();
+        main();
+    }
+    openFullscreen(canvas);
+});
+
+function openFullscreen(element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.webkitRequestFullscreen) { /* Safari */
+        element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) { /* IE11 */
+        element.msRequestFullscreen();
+    }
+}

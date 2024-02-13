@@ -5,11 +5,11 @@ body {
     padding: auto;
 }
 
-canvas {
+/* canvas {
     width: 100vw;
     height: 100vh;
     display: block;
-}
+} */
 
 button {
     margin: 0;
