@@ -21,12 +21,13 @@ void main() {
 `;
 
 var state = -1;
-var fullscreen = false;
+var prev_state;
 var req;
+const btn_rungame = document.getElementById("btn_rungame");
 
 function main() {
-    //var canvas = document.getElementById("canvas");
-    //var gl = canvas.getContext("webgl2");
+    var canvas = document.getElementById("canvas");
+    var gl = canvas.getContext("webgl2");
     if (!gl) {
         return;
     }
@@ -39,7 +40,6 @@ function main() {
     var positionBuffer = gl.createBuffer();
     var vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
-    //gl.enableVertexAttribArray(positionLocation);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     var vertices = new Float32Array([
         100, 100,
@@ -57,12 +57,16 @@ function main() {
     var translation = [0, 0];
     var color = [Math.random(), Math.random(), Math.random(), 1];
     var translationSpeed = 100;
-
-    then = 0;
-    req = requestAnimationFrame(drawScene);
+    var then = 0;
+    if (state != -1)
+        requestAnimationFrame(drawScene);
 
     function drawScene(now) {
         now *= 0.001;
+        if (prev_state == 0 || prev_state == -1) {
+            then = now;
+            prev_state = 1;
+        }
         var deltaTime = now - then;
         then = now;
         translation[0] += translationSpeed * deltaTime;
@@ -78,57 +82,42 @@ function main() {
         gl.uniform2fv(translationLocation, translation);
         var primitiveType = gl.TRIANGLES;
         var offset = 0;
-        var count = 18;
+        var count = 3;
         gl.drawArrays(primitiveType, offset, count);
-        if (state == 1)
-            req = requestAnimationFrame(drawScene);
-        else if (state == 0)
-            cancelAnimationFrame(req)
+        if (state != 0)
+            requestAnimationFrame(drawScene);
+    }
+
+    document.addEventListener("fullscreenchange", function () {
+        if (state == -1) {
+            prev_state = state;
+            state = 1;
+            requestAnimationFrame(drawScene);
+        }
+        else if (state == 0) {
+            prev_state = state;
+            state = 1;
+            requestAnimationFrame(drawScene);
+        }
+        else if (state == 1) {
+            prev_state = state;
+            state = 0;
+        }
+    });
+
+    btn_rungame.addEventListener("click", () => {
+        openFullscreen();
+    });
+
+    function openFullscreen() {
+        if (canvas.requestFullscreen) {
+            canvas.requestFullscreen();
+        } else if (canvas.webkitRequestFullscreen) { /* Safari */
+            canvas.webkitRequestFullscreen();
+        } else if (canvas.msRequestFullscreen) { /* IE11 */
+            canvas.msRequestFullscreen();
+        }
     }
 }
 
-function setGeometry(gl) {
-    gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array([
-            // left column
-            0, 0,
-            30, 0,
-            0, 150,
-            0, 150,
-            30, 0,
-            30, 150,
-
-            // top rung
-            30, 0,
-            100, 0,
-            30, 30,
-            30, 30,
-            100, 0,
-            100, 30,
-
-            // middle rung
-            30, 60,
-            67, 60,
-            30, 90,
-            30, 90,
-            67, 60,
-            67, 90,
-        ]),
-        gl.STATIC_DRAW);
-}
-
-document.addEventListener("fullscreenchange", function () {
-    if (state == -1) {
-        state = 1;
-        main();
-    }
-    else if (state == 0) {
-        console.log("reanudando")
-        state = 1;
-    }
-    else if (state == 1) {
-        console.log("paudando")
-        state = 0;
-    }
-});
+main();
