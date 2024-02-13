@@ -92,6 +92,7 @@ function main() {
         if (state == -1) {
             prev_state = state;
             state = 1;
+            btn_rungame.textContent = "Continue Game"
             requestAnimationFrame(drawScene);
         }
         else if (state == 0) {
