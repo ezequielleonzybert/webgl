@@ -20,9 +20,13 @@ void main() {
 }
 `;
 
+var state = -1;
+var fullscreen = false;
+var req;
+
 function main() {
     //var canvas = document.getElementById("canvas");
-    var gl = canvas.getContext("webgl2");
+    //var gl = canvas.getContext("webgl2");
     if (!gl) {
         return;
     }
@@ -53,8 +57,9 @@ function main() {
     var translation = [0, 0];
     var color = [Math.random(), Math.random(), Math.random(), 1];
     var translationSpeed = 100;
-    var then = 0;
-    requestAnimationFrame(drawScene);
+
+    then = 0;
+    req = requestAnimationFrame(drawScene);
 
     function drawScene(now) {
         now *= 0.001;
@@ -75,10 +80,11 @@ function main() {
         var offset = 0;
         var count = 18;
         gl.drawArrays(primitiveType, offset, count);
-        req = requestAnimationFrame(drawScene);
-        req;
+        if (state == 1)
+            req = requestAnimationFrame(drawScene);
+        else if (state == 0)
+            cancelAnimationFrame(req)
     }
-
 }
 
 function setGeometry(gl) {
@@ -113,11 +119,16 @@ function setGeometry(gl) {
 }
 
 document.addEventListener("fullscreenchange", function () {
-    if (fullscreen = !fullscreen) {
+    if (state == -1) {
+        state = 1;
         main();
     }
-    else {
-        console.log("cancelled")
-        cancelAnimationFrame(req);
+    else if (state == 0) {
+        console.log("reanudando")
+        state = 1;
+    }
+    else if (state == 1) {
+        console.log("paudando")
+        state = 0;
     }
 });

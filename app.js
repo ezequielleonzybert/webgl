@@ -1,8 +1,8 @@
-var fullscreen = false;
-var req;
+
 
 const btn_rungame = document.getElementById("btn_rungame");
 const canvas = document.getElementById("canvas");
+var gl = canvas.getContext("webgl2");
 
 btn_rungame.addEventListener("click", () => {
     openFullscreen();
@@ -17,9 +17,3 @@ function openFullscreen() {
         canvas.msRequestFullscreen();
     }
 }
-
-// document.addEventListener("fullscreenchange", function () {
-//     if (fullscreen = !fullscreen) {
-//         main();
-//     }
-// });
