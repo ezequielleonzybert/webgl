@@ -12,6 +12,9 @@ body {
 } */
 
 button {
+    width: 200px;
+    height: 100px;
+    font-size: 25px;
     margin: 0;
     position: absolute;
     top: 50%;
