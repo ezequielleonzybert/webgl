@@ -3,9 +3,11 @@ in vec2 a_position;
 
 uniform vec2 u_resolution;
 uniform vec2 u_translation;
+uniform mat3 u_matrix;
 
 void main() {
   vec2 position = a_position + u_translation;
+  position = (u_matrix * vec3(position, 1)).xy;
   vec2 zeroToOne = position / u_resolution;
   vec2 zeroToTwo = zeroToOne * 2.0;
   vec2 clipSpace = zeroToTwo - 1.0;
@@ -29,8 +31,12 @@ let prev_state;
 const btn_rungame = document.getElementById("btn_rungame");
 let canvas;
 let gl;
+let portrait = false;
 
 function init() {
+    if (window.innerWidth < window.innerHeight) {
+        portrait = true;
+    }
     canvas = document.createElement("canvas");
     document.body.appendChild(canvas);
     canvas.width = window.innerWidth;
@@ -48,14 +54,25 @@ function main() {
     var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
     var colorLocation = gl.getUniformLocation(program, "u_color");
     var translationLocation = gl.getUniformLocation(program, "u_translation");
+    var matrixLocation = gl.getUniformLocation(program, "u_matrix");
+
+    var translationMatrix = m3.identity();
+    var rotationMatrix = m3.rotation(0);
+    if (portrait) {
+        translationMatrix = m3.translation(window.innerWidth, 0);
+        rotationMatrix = m3.rotation(-Math.PI / 2);
+    }
+
+    var matrix = m3.multiply(translationMatrix, rotationMatrix);
+
     var positionBuffer = gl.createBuffer();
     var vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     var vertices = new Float32Array([
-        200, 200,
-        200, 300,
-        300, 250,
+        -50, 50,
+        50, 50,
+        0, -50,
     ]);
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     var size = 2;
@@ -65,7 +82,7 @@ function main() {
     var offset = 0;
     gl.vertexAttribPointer(
         positionLocation, size, type, normalize, stride, offset);
-    var translation = [0, 0];
+    var translation = [100, 100];
     var color = [Math.random(), Math.random(), Math.random(), 1];
     var translationSpeed = 100;
     var then = 0;
@@ -80,7 +97,7 @@ function main() {
         }
         var deltaTime = now - then;
         then = now;
-        translation[0] += translationSpeed * deltaTime;
+        //translation[0] += translationSpeed * deltaTime;
         webglUtils.resizeCanvasToDisplaySize(gl.canvas);
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
         gl.clearColor(0.9, 0.9, 0.5, 1.0);
@@ -91,6 +108,7 @@ function main() {
         gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
         gl.uniform4fv(colorLocation, color);
         gl.uniform2fv(translationLocation, translation);
+        gl.uniformMatrix3fv(matrixLocation, false, matrix);
         var primitiveType = gl.TRIANGLES;
         var offset = 0;
         var count = 3;
