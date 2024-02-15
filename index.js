@@ -59,7 +59,7 @@ function init() {
     overlay.style.fontFamily = "Verdana";
     overlay.innerText =
         "resolution: " + width + " x " + height +
-        "\npixel ratio: " + window.devicePixelRatio.toFixed(7);
+        "\npixel ratio: " + window.devicePixelRatio;
     document.body.appendChild(container);
     container.appendChild(canvas);
     container.appendChild(overlay);
