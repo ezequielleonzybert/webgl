@@ -34,12 +34,12 @@ let gl;
 let overlay;
 let portrait = false;
 let container;
-let width = window.screen.availWidth;
-let height = window.screen.availHeight;
+let width = window.screen.width;
+let height = window.screen.height;
 
 function init() {
     console.log(width, height)
-    if (window.innerWidth < window.innerHeight) {
+    if (width < height) {
         portrait = true;
     }
     container = document.createElement("container");
