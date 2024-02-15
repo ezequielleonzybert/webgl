@@ -34,9 +34,9 @@ let gl;
 let overlay;
 let portrait = false;
 let container;
-let width = window.screen.width;
-let height = window.screen.height;
-console.log(window.devicePixelRatio.toFixed(8));
+let pixel_ratio = window.devicePixelRatio;
+let width = window.screen.width * pixel_ratio;
+let height = window.screen.height * pixel_ratio;
 
 function init() {
     console.log(width, height)
