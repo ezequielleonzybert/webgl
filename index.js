@@ -36,6 +36,7 @@ let portrait = false;
 let container;
 let width = window.screen.width;
 let height = window.screen.height;
+console.log(window.devicePixelRatio.toFixed(8));
 
 function init() {
     console.log(width, height)
