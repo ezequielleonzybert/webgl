@@ -34,6 +34,8 @@ let gl;
 let overlay;
 let portrait = false;
 let container;
+let width = screen.width;
+let height = screen.height;
 
 function init() {
     if (window.innerWidth < window.innerHeight) {
@@ -43,14 +45,14 @@ function init() {
     canvas = document.createElement("canvas");
     overlay = document.createElement("div");
     container.style.position = "relative";
-    container.width = window.innerWidth;
-    container.height = window.innerHeight;
+    container.width = width;
+    container.height = height
     container.display = "block";
     canvas.id = "canvas";
     canvas.style.display = "block";
     canvas.style.position = "absolute";
-    canvas.width = screen.width;
-    canvas.height = screen.height;
+    canvas.width = width;
+    canvas.height = height;
     overlay.id = "overlay";
     overlay.style.position = "absolute";
     overlay.style.width = "200px";
