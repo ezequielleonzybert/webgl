@@ -31,6 +31,7 @@ let prev_state;
 const btn_rungame = document.getElementById("btn_rungame");
 let canvas;
 let gl;
+let overlay;
 let portrait = false;
 
 function init() {
@@ -38,10 +39,18 @@ function init() {
         portrait = true;
     }
     canvas = document.createElement("canvas");
+    overlay = document.createElement("div");
+    canvas.id = "canvas";
+    overlay.id = "overlay";
     document.body.appendChild(canvas);
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    document.body.appendChild(overlay);
     gl = canvas.getContext("webgl2");
+
+    // overlay = document.createElement("div");
+    // overlay.id = "overlay";
+    // overlay.style.position = "absolute";
+    // overlay.style.zIndex = "0";
+    // document.body.appendChild(overlay);
 }
 
 function main() {
@@ -59,6 +68,7 @@ function main() {
     var translationMatrix = m3.identity();
     var rotationMatrix = m3.rotation(0);
     if (portrait) {
+        console.log(window.innerWidth);
         translationMatrix = m3.translation(window.innerWidth, 0);
         rotationMatrix = m3.rotation(-Math.PI / 2);
     }
