@@ -38,6 +38,7 @@ let width = screen.width;
 let height = screen.height;
 
 function init() {
+    console.log(width, height)
     if (window.innerWidth < window.innerHeight) {
         portrait = true;
     }
