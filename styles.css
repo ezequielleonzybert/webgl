@@ -3,10 +3,6 @@ body {
     padding: auto;
 }
 
-.container {
-    position: relative;
-}
-
 button {
     width: 200px;
     height: 100px;
@@ -17,18 +13,4 @@ button {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-}
-
-canvas {
-    display: block;
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-}
-
-#overlay {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    background-color: red;
 }

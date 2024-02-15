@@ -33,18 +33,35 @@ let canvas;
 let gl;
 let overlay;
 let portrait = false;
+let container;
 
 function init() {
     if (window.innerWidth < window.innerHeight) {
         portrait = true;
     }
+    container = document.createElement("container");
     canvas = document.createElement("canvas");
     overlay = document.createElement("div");
+    container.style.position = "relative";
+    container.width = window.innerWidth;
+    container.height = window.innerHeight;
+    container.display = "block";
     canvas.id = "canvas";
+    canvas.style.display = "block";
+    canvas.style.position = "absolute";
+    canvas.width = screen.width;
+    canvas.height = screen.height;
     overlay.id = "overlay";
-    document.body.appendChild(canvas);
-    document.body.appendChild(overlay);
+    overlay.style.position = "absolute";
+    overlay.style.width = "200px";
+    overlay.style.height = "200px";
+    overlay.style.backgroundColor = "red";
+    document.body.appendChild(container);
+    container.appendChild(canvas);
+    container.appendChild(overlay);
+
     gl = canvas.getContext("webgl2");
+    console.log(canvas.width, canvas.height);
 }
 
 function main() {
@@ -129,15 +146,17 @@ function main() {
             requestAnimationFrame(drawScene);
         }
         else if (state == 0) {
+            canvas.width = screen.width;
+            canvas.height = screen.height;
             prev_state = state;
             state = 1;
-            canvas.style.display = "block";
+            container.style.display = "block";
             requestAnimationFrame(drawScene);
         }
         else if (state == 1) {
             prev_state = state;
             state = 0;
-            canvas.style.display = "none";
+            container.style.display = "none";
         }
     });
 
@@ -148,7 +167,7 @@ btn_rungame.addEventListener("click", () => {
         init();
         main();
     }
-    openFullscreen(canvas);
+    openFullscreen(container);
 });
 
 function openFullscreen(element) {
