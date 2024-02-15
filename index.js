@@ -45,6 +45,7 @@ function init() {
     }
     container = document.createElement("container");
     canvas = document.createElement("canvas");
+    gl = canvas.getContext("webgl2");
     overlay = document.createElement("div");
     container.style.position = "relative";
     container.width = width;
@@ -59,12 +60,12 @@ function init() {
     overlay.style.fontFamily = "Verdana";
     overlay.innerText =
         "resolution: " + width + " x " + height +
-        "\npixel ratio: " + window.devicePixelRatio;
+        "\npixel ratio: " + window.devicePixelRatio +
+        "\ncanvas width: " + gl.canvas.width +
+        "\ncanvas height: " + gl.canvas.height;
     document.body.appendChild(container);
     container.appendChild(canvas);
     container.appendChild(overlay);
-
-    gl = canvas.getContext("webgl2");
 }
 
 function main() {
