@@ -56,9 +56,8 @@ function init() {
     canvas.height = height;
     overlay.id = "overlay";
     overlay.style.position = "absolute";
-    overlay.style.width = "200px";
-    overlay.style.height = "200px";
-    overlay.style.backgroundColor = "rgb(255,0,0,0.5)";
+    overlay.style.padding = "15px";
+    overlay.innerText = width + " x " + height;
     document.body.appendChild(container);
     container.appendChild(canvas);
     container.appendChild(overlay);
