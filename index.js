@@ -35,8 +35,8 @@ let overlay;
 let portrait = false;
 let container;
 let pixel_ratio = window.devicePixelRatio;
-let width = window.screen.width * pixel_ratio;
-let height = window.screen.height * pixel_ratio;
+let width = Math.round(window.screen.width * pixel_ratio);
+let height = Math.round(window.screen.height * pixel_ratio);
 
 function init() {
     console.log(width, height)
@@ -62,7 +62,8 @@ function init() {
         "resolution: " + width + " x " + height +
         "\npixel ratio: " + window.devicePixelRatio +
         "\ncanvas width: " + gl.canvas.width +
-        "\ncanvas height: " + gl.canvas.height;
+        "\ncanvas height: " + gl.canvas.height +
+        "\nportrait: " + portrait;
     document.body.appendChild(container);
     container.appendChild(canvas);
     container.appendChild(overlay);
@@ -83,9 +84,8 @@ function main() {
     var translationMatrix = m3.identity();
     var rotationMatrix = m3.rotation(0);
     if (portrait) {
-        console.log(window.innerWidth);
-        translationMatrix = m3.translation(window.innerWidth, 0);
-        rotationMatrix = m3.rotation(-Math.PI / 2);
+        translationMatrix = m3.translation(412, 0);
+        // rotationMatrix = m3.rotation(-Math.PI / 2);
     }
 
     var matrix = m3.multiply(translationMatrix, rotationMatrix);
@@ -107,7 +107,7 @@ function main() {
     var offset = 0;
     gl.vertexAttribPointer(
         positionLocation, size, type, normalize, stride, offset);
-    var translation = [100, 100];
+    var translation = [0, 0];
     var color = [Math.random(), Math.random(), Math.random(), 1];
     var translationSpeed = 100;
     var then = 0;
@@ -124,13 +124,13 @@ function main() {
         then = now;
         //translation[0] += translationSpeed * deltaTime;
         webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        gl.viewport(0, 0, width, height);
         gl.clearColor(0.9, 0.9, 0.5, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.useProgram(program);
         gl.enableVertexAttribArray(positionLocation);
         gl.bindVertexArray(vao);
-        gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
+        gl.uniform2f(resolutionLocation, width, height);
         gl.uniform4fv(colorLocation, color);
         gl.uniform2fv(translationLocation, translation);
         gl.uniformMatrix3fv(matrixLocation, false, matrix);
