@@ -49,21 +49,21 @@ function init() {
     container.width = width;
     container.height = height
     container.display = "block";
-    canvas.id = "canvas";
     canvas.style.display = "block";
     canvas.style.position = "absolute";
     canvas.width = width;
     canvas.height = height;
-    overlay.id = "overlay";
     overlay.style.position = "absolute";
     overlay.style.padding = "15px";
-    overlay.innerText = width + " x " + height;
+    overlay.style.fontFamily = "Verdana";
+    overlay.innerText =
+        "resolution: " + width + " x " + height +
+        "\npixel ratio: " + window.devicePixelRatio;
     document.body.appendChild(container);
     container.appendChild(canvas);
     container.appendChild(overlay);
 
     gl = canvas.getContext("webgl2");
-    console.log(canvas.width, canvas.height);
 }
 
 function main() {
