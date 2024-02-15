@@ -34,8 +34,8 @@ let gl;
 let overlay;
 let portrait = false;
 let container;
-let width = window.screen.width;
-let height = window.screen.height;
+let width = window.screen.availWidth;
+let height = window.screen.availHeight;
 
 function init() {
     console.log(width, height)
