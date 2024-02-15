@@ -55,7 +55,7 @@ function init() {
     overlay.style.position = "absolute";
     overlay.style.width = "200px";
     overlay.style.height = "200px";
-    overlay.style.backgroundColor = "red";
+    overlay.style.backgroundColor = "rgb(255,0,0,0.5)";
     document.body.appendChild(container);
     container.appendChild(canvas);
     container.appendChild(overlay);
@@ -146,11 +146,11 @@ function main() {
             requestAnimationFrame(drawScene);
         }
         else if (state == 0) {
-            canvas.width = screen.width;
-            canvas.height = screen.height;
             prev_state = state;
             state = 1;
             container.style.display = "block";
+            canvas.width = screen.width;
+            canvas.height = screen.height;
             requestAnimationFrame(drawScene);
         }
         else if (state == 1) {
