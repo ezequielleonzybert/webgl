@@ -34,8 +34,8 @@ let gl;
 let overlay;
 let portrait = false;
 let container;
-let width = screen.width;
-let height = screen.height;
+let width = window.screen.width;
+let height = window.screen.height;
 
 function init() {
     console.log(width, height)
@@ -152,8 +152,8 @@ function main() {
             prev_state = state;
             state = 1;
             container.style.display = "block";
-            canvas.width = screen.width;
-            canvas.height = screen.height;
+            canvas.width = width;
+            canvas.height = height;
             requestAnimationFrame(drawScene);
         }
         else if (state == 1) {
