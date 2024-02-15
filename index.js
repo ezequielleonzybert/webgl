@@ -45,12 +45,6 @@ function init() {
     document.body.appendChild(canvas);
     document.body.appendChild(overlay);
     gl = canvas.getContext("webgl2");
-
-    // overlay = document.createElement("div");
-    // overlay.id = "overlay";
-    // overlay.style.position = "absolute";
-    // overlay.style.zIndex = "0";
-    // document.body.appendChild(overlay);
 }
 
 function main() {
