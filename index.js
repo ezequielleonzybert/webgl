@@ -35,8 +35,10 @@ let overlay;
 let portrait = false;
 let container;
 let pixel_ratio = window.devicePixelRatio;
-let width = Math.round(window.screen.width * pixel_ratio);
-let height = Math.round(window.screen.height * pixel_ratio);
+//let width = Math.round(window.screen.width * pixel_ratio);
+//let height = Math.round(window.screen.height * pixel_ratio);
+let width = window.screen.width;
+let height = window.screen.height;
 
 function init() {
     console.log(width, height)
@@ -51,10 +53,11 @@ function init() {
     container.width = width;
     container.height = height
     container.display = "block";
+    container.style.backgroundColor = "red";
     canvas.style.display = "block";
     canvas.style.position = "absolute";
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = width - 10;
+    canvas.height = height - 10;
     overlay.style.position = "absolute";
     overlay.style.padding = "15px";
     overlay.style.fontFamily = "Verdana";
@@ -67,6 +70,7 @@ function init() {
     document.body.appendChild(container);
     container.appendChild(canvas);
     container.appendChild(overlay);
+
 }
 
 function main() {
@@ -84,8 +88,8 @@ function main() {
     var translationMatrix = m3.identity();
     var rotationMatrix = m3.rotation(0);
     if (portrait) {
-        translationMatrix = m3.translation(412, 0);
-        // rotationMatrix = m3.rotation(-Math.PI / 2);
+        // translationMatrix = m3.translation(0, 0);
+        //rotationMatrix = m3.rotation(-Math.PI / 2);
     }
 
     var matrix = m3.multiply(translationMatrix, rotationMatrix);
@@ -107,7 +111,7 @@ function main() {
     var offset = 0;
     gl.vertexAttribPointer(
         positionLocation, size, type, normalize, stride, offset);
-    var translation = [0, 0];
+    var translation = [200, height / 2];
     var color = [Math.random(), Math.random(), Math.random(), 1];
     var translationSpeed = 100;
     var then = 0;
