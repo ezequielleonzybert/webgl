@@ -185,5 +185,7 @@ function openFullscreen(element) {
         element.webkitRequestFullscreen();
     } else if (element.msRequestFullscreen) { /* IE11 */
         element.msRequestFullscreen();
+    } else if(element.mozRequestFullscreen) {
+        element.mozRrquestFullscreen();
     }
 }
