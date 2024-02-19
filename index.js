@@ -1,5 +1,5 @@
-import Pendulum from "/pendulum.js"
-import * as Geometry from "/geometry.js"
+import Pendulum from "./pendulum.js"
+import * as Geometry from "./geometry.js"
 
 const vertexShaderSource = `#version 300 es
 in vec2 a_position;
