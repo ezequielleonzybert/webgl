@@ -1,3 +1,6 @@
+import Pendulum from "/pendulum.js"
+import * as Geometry from "/geometry.js"
+
 const vertexShaderSource = `#version 300 es
 in vec2 a_position;
 
@@ -37,36 +40,39 @@ let container;
 let pixel_ratio = window.devicePixelRatio;
 //let width = Math.round(window.screen.width * pixel_ratio);
 //let height = Math.round(window.screen.height * pixel_ratio);
-let width = window.screen.width;
-let height = window.screen.height;
+let device_width = window.screen.width;
+let device_height = window.screen.height;
+let width = device_width;
+let height = device_height;
 
 function init() {
-    console.log(width, height)
     if (width < height) {
         portrait = true;
+        // height -= 41;
+        width = device_height;
+        height = device_width;
     }
     container = document.createElement("container");
     canvas = document.createElement("canvas");
     gl = canvas.getContext("webgl2");
     overlay = document.createElement("div");
     container.style.position = "relative";
-    container.width = width;
-    container.height = height
+    container.width = device_width;
+    container.height = device_height;
     container.display = "block";
     container.style.backgroundColor = "red";
     canvas.style.display = "block";
     canvas.style.position = "absolute";
-    canvas.width = width - 10;
-    canvas.height = height - 10;
+    canvas.width = device_width;
+    canvas.height = device_height;
     overlay.style.position = "absolute";
     overlay.style.padding = "15px";
     overlay.style.fontFamily = "Verdana";
     overlay.innerText =
         "resolution: " + width + " x " + height +
         "\npixel ratio: " + window.devicePixelRatio +
-        "\ncanvas width: " + gl.canvas.width +
-        "\ncanvas height: " + gl.canvas.height +
         "\nportrait: " + portrait;
+
     document.body.appendChild(container);
     container.appendChild(canvas);
     container.appendChild(overlay);
@@ -88,8 +94,8 @@ function main() {
     var translationMatrix = m3.identity();
     var rotationMatrix = m3.rotation(0);
     if (portrait) {
-        // translationMatrix = m3.translation(0, 0);
-        //rotationMatrix = m3.rotation(-Math.PI / 2);
+        translationMatrix = m3.translation(device_width, 0);
+        rotationMatrix = m3.rotation(-Math.PI / 2);
     }
 
     var matrix = m3.multiply(translationMatrix, rotationMatrix);
@@ -98,11 +104,7 @@ function main() {
     var vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    var vertices = new Float32Array([
-        -50, 50,
-        50, 50,
-        0, -50,
-    ]);
+    var vertices = new Float32Array(Geometry.rectangle(width / 2, height / 2, 50, 50));
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     var size = 2;
     var type = gl.FLOAT;
@@ -111,8 +113,10 @@ function main() {
     var offset = 0;
     gl.vertexAttribPointer(
         positionLocation, size, type, normalize, stride, offset);
-    var translation = [200, height / 2];
-    var color = [Math.random(), Math.random(), Math.random(), 1];
+    var translation = [0, 0];
+    if (portrait)
+        translation = [0, 0];
+    var color = [1, 0, 0, 1];
     var translationSpeed = 100;
     var then = 0;
     if (state != -1)
@@ -126,21 +130,21 @@ function main() {
         }
         var deltaTime = now - then;
         then = now;
-        //translation[0] += translationSpeed * deltaTime;
+        translation[1] += translationSpeed * deltaTime;
         webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-        gl.viewport(0, 0, width, height);
+        gl.viewport(0, 0, device_width, device_height);
         gl.clearColor(0.9, 0.9, 0.5, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.useProgram(program);
         gl.enableVertexAttribArray(positionLocation);
         gl.bindVertexArray(vao);
-        gl.uniform2f(resolutionLocation, width, height);
+        gl.uniform2f(resolutionLocation, device_width, device_height);
         gl.uniform4fv(colorLocation, color);
         gl.uniform2fv(translationLocation, translation);
         gl.uniformMatrix3fv(matrixLocation, false, matrix);
         var primitiveType = gl.TRIANGLES;
         var offset = 0;
-        var count = 3;
+        var count = vertices.length / 2;
         gl.drawArrays(primitiveType, offset, count);
         if (state != 0)
             requestAnimationFrame(drawScene);
