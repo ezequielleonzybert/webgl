@@ -38,8 +38,6 @@ let overlay;
 let portrait = false;
 let container;
 let pixel_ratio = window.devicePixelRatio;
-//let width = Math.round(window.screen.width * pixel_ratio);
-//let height = Math.round(window.screen.height * pixel_ratio);
 let device_width = window.screen.width;
 let device_height = window.screen.height;
 let width = device_width;
@@ -70,7 +68,7 @@ function init() {
     overlay.style.fontFamily = "Verdana";
     overlay.innerText =
         "resolution: " + width + " x " + height +
-        "\npixel ratio: " + window.devicePixelRatio +
+        "\npixel ratio: " + pixel_ratio +
         "\nportrait: " + portrait;
 
     document.body.appendChild(container);
@@ -104,7 +102,7 @@ function main() {
     var vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    var vertices = new Float32Array(Geometry.rectangle(width / 2, height / 2, 50, 50));
+    var vertices = new Float32Array(Geometry.rectangle(width / 2, height / 2, width * .5, height * .5));
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     var size = 2;
     var type = gl.FLOAT;
@@ -130,7 +128,7 @@ function main() {
         }
         var deltaTime = now - then;
         then = now;
-        translation[1] += translationSpeed * deltaTime;
+        //translation[1] += translationSpeed * deltaTime;
         webglUtils.resizeCanvasToDisplaySize(gl.canvas);
         gl.viewport(0, 0, device_width, device_height);
         gl.clearColor(0.9, 0.9, 0.5, 1.0);
@@ -189,7 +187,7 @@ function openFullscreen(element) {
         element.webkitRequestFullscreen();
     } else if (element.msRequestFullscreen) { /* IE11 */
         element.msRequestFullscreen();
-    } else if(element.mozRequestFullscreen) {
+    } else if (element.mozRequestFullscreen) {
         element.mozRrquestFullscreen();
     }
 }
