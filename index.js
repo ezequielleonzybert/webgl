@@ -103,7 +103,6 @@ function main() {
     gl.bindVertexArray(vao);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     var vertices = new Float32Array(Geometry.circle(width / 2, height / 2, 100, 40));
-    // var vertices = new Float32Array(Geometry.rectangle(width / 2, height / 2, width * .5, height * .5));
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     var size = 2;
     var type = gl.FLOAT;
