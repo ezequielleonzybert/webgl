@@ -34,10 +34,10 @@ let prev_state;
 const btn_rungame = document.getElementById("btn_rungame");
 let canvas;
 let gl;
-let overlay;
+// let overlay;
 let portrait = false;
 let container;
-let pixel_ratio = window.devicePixelRatio;
+// let pixel_ratio = window.devicePixelRatio;
 let device_width = window.screen.width;
 let device_height = window.screen.height;
 let width = device_width;
@@ -53,7 +53,7 @@ function init() {
     container = document.createElement("container");
     canvas = document.createElement("canvas");
     gl = canvas.getContext("webgl2");
-    overlay = document.createElement("div");
+    // overlay = document.createElement("div");
     container.style.position = "relative";
     container.width = device_width;
     container.height = device_height;
@@ -63,17 +63,17 @@ function init() {
     canvas.style.position = "absolute";
     canvas.width = device_width;
     canvas.height = device_height;
-    overlay.style.position = "absolute";
-    overlay.style.padding = "15px";
-    overlay.style.fontFamily = "Verdana";
-    overlay.innerText =
-        "resolution: " + width + " x " + height +
-        "\npixel ratio: " + pixel_ratio +
-        "\nportrait: " + portrait;
+    // overlay.style.position = "absolute";
+    // overlay.style.padding = "15px";
+    // overlay.style.fontFamily = "Verdana";
+    // overlay.innerText =
+    //     "resolution: " + width + " x " + height +
+    //     "\npixel ratio: " + pixel_ratio +
+    //     "\nportrait: " + portrait;
 
     document.body.appendChild(container);
     container.appendChild(canvas);
-    container.appendChild(overlay);
+    // container.appendChild(overlay);
 
 }
 
@@ -102,7 +102,8 @@ function main() {
     var vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    var vertices = new Float32Array(Geometry.rectangle(width / 2, height / 2, width * .5, height * .5));
+    var vertices = new Float32Array(Geometry.circle(width / 2, height / 2, 100, 40));
+    // var vertices = new Float32Array(Geometry.rectangle(width / 2, height / 2, width * .5, height * .5));
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     var size = 2;
     var type = gl.FLOAT;
@@ -191,3 +192,10 @@ function openFullscreen(element) {
         element.mozRrquestFullscreen();
     }
 }
+
+document.addEventListener('contextmenu', function (e) {
+    if (e.button === 2) {
+        e.preventDefault();
+        return false;
+    }
+}, false);
