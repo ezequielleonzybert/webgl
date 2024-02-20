@@ -1,5 +1,6 @@
 import Pendulum from "./pendulum.js"
 import * as Geometry from "./geometry.js"
+import * as Game from "./game.js";
 
 const vertexShaderSource = `#version 300 es
 in vec2 a_position;
@@ -75,7 +76,10 @@ function init() {
     container.appendChild(canvas);
     // container.appendChild(overlay);
 
+    Game.setup();
 }
+
+// MAIN ---------------------------------------------------------------------------
 
 function main() {
     if (!gl) {
@@ -102,7 +106,8 @@ function main() {
     var vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    var vertices = new Float32Array(Geometry.circle(width / 2, height / 2, 100, 40));
+
+    var vertices = Geometry.circle(width / 2, height / 2, 50, 40);
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
     var size = 2;
     var type = gl.FLOAT;
@@ -111,15 +116,13 @@ function main() {
     var offset = 0;
     gl.vertexAttribPointer(
         positionLocation, size, type, normalize, stride, offset);
-    var translation = [0, 0];
-    if (portrait)
-        translation = [0, 0];
+
     var color = [1, 0, 0, 1];
-    var translationSpeed = 100;
     var then = 0;
     if (state != -1)
         requestAnimationFrame(drawScene);
 
+    // DRAW ------------------------------------------------------------------------
     function drawScene(now) {
         now *= 0.001;
         if (prev_state == 0 || prev_state == -1) {
@@ -129,6 +132,7 @@ function main() {
         var deltaTime = now - then;
         then = now;
         //translation[1] += translationSpeed * deltaTime;
+        Game.update();
         webglUtils.resizeCanvasToDisplaySize(gl.canvas);
         gl.viewport(0, 0, device_width, device_height);
         gl.clearColor(0.9, 0.9, 0.5, 1.0);
@@ -138,7 +142,7 @@ function main() {
         gl.bindVertexArray(vao);
         gl.uniform2f(resolutionLocation, device_width, device_height);
         gl.uniform4fv(colorLocation, color);
-        gl.uniform2fv(translationLocation, translation);
+        //gl.uniform2fv(translationLocation, translation);
         gl.uniformMatrix3fv(matrixLocation, false, matrix);
         var primitiveType = gl.TRIANGLES;
         var offset = 0;
@@ -147,7 +151,7 @@ function main() {
         if (state != 0)
             requestAnimationFrame(drawScene);
     }
-
+    // END DRAW ---------------------------------------------------------------
     document.addEventListener("fullscreenchange", function () {
         if (state == -1) {
             prev_state = state;

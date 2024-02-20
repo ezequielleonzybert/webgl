@@ -6,7 +6,7 @@ function get_earcut(vertices) {
         result.push(vertices[index]);
         result.push(vertices[index + 1]);
     }
-    return result;
+    return new Float32Array(result);
 }
 
 function rectangle(x, y, w, h) {
