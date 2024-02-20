@@ -44,10 +44,11 @@ let device_height = window.screen.height;
 let width = device_width;
 let height = device_height;
 
+// INIT ---------------------------------------------------------------------------
+
 function init() {
     if (width < height) {
         portrait = true;
-        // height -= 41;
         width = device_height;
         height = device_width;
     }
@@ -163,8 +164,8 @@ function main() {
             prev_state = state;
             state = 1;
             container.style.display = "block";
-            canvas.width = width;
-            canvas.height = height;
+            canvas.width = device_width;
+            canvas.height = device_height;
             requestAnimationFrame(drawScene);
         }
         else if (state == 1) {
